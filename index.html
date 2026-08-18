@@ -285,6 +285,15 @@
       color: var(--text-muted);
     }
 
+    .realism-quote-container {
+      transition: opacity 0.25s ease-in-out;
+      opacity: 1;
+    }
+
+    .realism-quote-container.fade-out {
+      opacity: 0;
+    }
+
     .realism-quote {
       font-style: italic;
       font-size: 0.95rem;
@@ -299,6 +308,11 @@
       font-size: 0.8rem;
       font-weight: 600;
       cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .btn-refresh:active {
+      opacity: 0.6;
     }
   </style>
 </head>
@@ -366,15 +380,15 @@
     <div class="section-title">A Glimpse of Realism</div>
     <div class="realism-card">
       <div class="realism-header">
-        <div>
+        <div id="quoteContent" class="realism-quote-container">
           <span id="quoteNumber" class="entry-id">#0000</span>
           <span id="quoteHandle" class="entry-handle">@loading...</span>
+          <p id="quoteText" class="realism-quote" style="margin-top: 8px;">
+            "Loading thoughts..."
+          </p>
         </div>
         <button type="button" id="refreshBtn" class="btn-refresh">↻ Read Another</button>
       </div>
-      <p id="quoteText" class="realism-quote">
-        "Loading latest thoughts..."
-      </p>
     </div>
 
   </div>
@@ -411,7 +425,6 @@
       const feelingForm = document.getElementById('feelingForm');
       const refreshBtn = document.getElementById('refreshBtn');
 
-      // Word Counter Listener
       if (messageInput && wordCountDisplay) {
         messageInput.addEventListener('input', () => {
           const words = messageInput.value.trim().split(/\s+/).filter(w => w.length > 0);
@@ -492,24 +505,49 @@
         document.getElementById('progressFill').style.width = `${percentage}%`;
       }
 
-      getRandomQuote();
+      // Always display the very FIRST message on page load
+      getFirstQuote();
+    }
+
+    async function getFirstQuote() {
+      if (!supabaseClient) return;
+
+      const { data, error } = await supabaseClient
+        .from('submissions')
+        .select('*')
+        .order('id', { ascending: true })
+        .limit(1);
+
+      if (!error && data && data.length > 0) {
+        const entry = data[0];
+        updateQuoteUI(entry);
+      }
     }
 
     async function getRandomQuote() {
       if (!supabaseClient) return;
 
-      const { data, error } = await supabaseClient
-        .from('submissions')
-        .select('*');
+      const quoteContainer = document.getElementById('quoteContent');
+      quoteContainer.classList.add('fade-out');
 
-      if (!error && data && data.length > 0) {
-        const randomIndex = Math.floor(Math.random() * data.length);
-        const entry = data[randomIndex];
+      setTimeout(async () => {
+        const { data, error } = await supabaseClient
+          .from('submissions')
+          .select('*');
 
-        document.getElementById('quoteNumber').innerText = `#${String(entry.id).padStart(4, '0')}`;
-        document.getElementById('quoteHandle').innerText = `@${entry.username}`;
-        document.getElementById('quoteText').innerText = `"${entry.message}"`;
-      }
+        if (!error && data && data.length > 0) {
+          const randomIndex = Math.floor(Math.random() * data.length);
+          const entry = data[randomIndex];
+          updateQuoteUI(entry);
+        }
+        quoteContainer.classList.remove('fade-out');
+      }, 200);
+    }
+
+    function updateQuoteUI(entry) {
+      document.getElementById('quoteNumber').innerText = `#${String(entry.id).padStart(4, '0')}`;
+      document.getElementById('quoteHandle').innerText = `@${entry.username}`;
+      document.getElementById('quoteText').innerText = `"${entry.message}"`;
     }
   </script>
 </body>
