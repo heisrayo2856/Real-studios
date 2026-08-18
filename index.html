@@ -423,7 +423,7 @@
       }
 
       if (refreshBtn) {
-        refreshBtn.addEventListener('click', fetchData);
+        refreshBtn.addEventListener('click', getRandomQuote);
       }
 
       fetchData();
@@ -447,14 +447,20 @@
         document.getElementById('progressFill').style.width = `${percentage}%`;
       }
 
-      const { data } = await supabaseClient
-        .from('submissions')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(1);
+      getRandomQuote();
+    }
 
-      if (data && data.length > 0) {
-        const entry = data[0];
+    async function getRandomQuote() {
+      if (!supabaseClient) return;
+
+      const { data, error } = await supabaseClient
+        .from('submissions')
+        .select('*');
+
+      if (!error && data && data.length > 0) {
+        const randomIndex = Math.floor(Math.random() * data.length);
+        const entry = data[randomIndex];
+
         document.getElementById('quoteNumber').innerText = `#${String(entry.id).padStart(4, '0')}`;
         document.getElementById('quoteHandle').innerText = `@${entry.username}`;
         document.getElementById('quoteText').innerText = `"${entry.message}"`;
