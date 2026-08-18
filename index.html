@@ -362,7 +362,7 @@
 
   <script>
     const SUPABASE_URL = 'https://zhfmysfwrduyayveaylc.supabase.co';
-    const SUPABASE_KEY = 'Sb_publishable_03a4xF6WrtdH2Z4SLUzFiw_JZqrWATy';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpoZm15c2Z3cmR1eWF5dmVheWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcwNjM5MDIsImV4cCI6MjEwMjYzOTkwMn0.RRCxz-bhiT92VVvOo4rpEt77VNeuVqtju9oDwHE_6o0';
     
     let supabaseClient = null;
     if (window.supabase) {
@@ -441,7 +441,7 @@
         .from('submissions')
         .select('*', { count: 'exact', head: true });
 
-      if (count !== null) {
+      if (count !== null && count !== undefined) {
         document.getElementById('counterText').innerText = `${count} / 2000`;
         const percentage = Math.min((count / 2000) * 100, 100);
         document.getElementById('progressFill').style.width = `${percentage}%`;
