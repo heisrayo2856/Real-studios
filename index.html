@@ -123,6 +123,22 @@
       margin-bottom: 6px;
     }
 
+    .field-footer {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 4px;
+    }
+
+    .word-count {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .word-count.limit-exceeded {
+      color: #d93838;
+      font-weight: 700;
+    }
+
     /* Tooltip Bubble */
     .speech-bubble {
       position: absolute;
@@ -332,6 +348,9 @@
             placeholder="Your real message. Step away from the noise." 
             required
           ></textarea>
+          <div class="field-footer">
+            <small id="wordCount" class="word-count">0 / 150 words</small>
+          </div>
         </div>
 
         <div class="form-group">
@@ -363,6 +382,7 @@
   <script>
     const SUPABASE_URL = 'https://zhfmysfwrduyayveaylc.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpoZm15c2Z3cmR1eWF5dmVheWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcwNjM5MDIsImV4cCI6MjEwMjYzOTkwMn0.RRCxz-bhiT92VVvOo4rpEt77VNeuVqtju9oDwHE_6o0';
+    const MAX_WORDS = 150;
     
     let supabaseClient = null;
     if (window.supabase) {
@@ -386,8 +406,25 @@
     document.addEventListener('DOMContentLoaded', () => {
       const spinBtn = document.getElementById('spinBtn');
       const usernameInput = document.getElementById('username');
+      const messageInput = document.getElementById('message');
+      const wordCountDisplay = document.getElementById('wordCount');
       const feelingForm = document.getElementById('feelingForm');
       const refreshBtn = document.getElementById('refreshBtn');
+
+      // Word Counter Listener
+      if (messageInput && wordCountDisplay) {
+        messageInput.addEventListener('input', () => {
+          const words = messageInput.value.trim().split(/\s+/).filter(w => w.length > 0);
+          const count = words.length;
+          wordCountDisplay.innerText = `${count} / ${MAX_WORDS} words`;
+
+          if (count > MAX_WORDS) {
+            wordCountDisplay.classList.add('limit-exceeded');
+          } else {
+            wordCountDisplay.classList.remove('limit-exceeded');
+          }
+        });
+      }
 
       if (spinBtn && usernameInput) {
         spinBtn.addEventListener('click', (e) => {
@@ -403,8 +440,14 @@
           e.preventDefault();
           if (!supabaseClient) return alert("Database connection error.");
 
+          const message = messageInput.value.trim();
+          const words = message.split(/\s+/).filter(w => w.length > 0);
+
+          if (words.length > MAX_WORDS) {
+            return alert(`Please shorten your message to ${MAX_WORDS} words or fewer.`);
+          }
+
           const username = usernameInput.value;
-          const message = document.getElementById('message').value;
           const igHandle = document.getElementById('igHandle').value;
 
           const { error } = await supabaseClient
@@ -415,8 +458,10 @@
             alert("Error submitting: " + error.message);
           } else {
             alert("Submitted successfully!");
-            document.getElementById('message').value = '';
+            messageInput.value = '';
             document.getElementById('igHandle').value = '';
+            wordCountDisplay.innerText = `0 / ${MAX_WORDS} words`;
+            wordCountDisplay.classList.remove('limit-exceeded');
             fetchData();
           }
         });
