@@ -231,7 +231,7 @@
       transition: background 0.2s;
     }
 
-    .btn-spin:hover, .submit-btn:hover {
+    .btn-spin:hover, .submit-btn:hover, .btn-refresh:hover {
       background: var(--accent-hover);
     }
 
@@ -267,17 +267,40 @@
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
     }
 
-    .realism-header {
+    .realism-top-actions {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .btn-refresh {
+      background: var(--accent-color);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
       align-items: center;
-      margin-bottom: 12px;
+      gap: 6px;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .btn-refresh:active {
+      transform: scale(0.98);
+    }
+
+    .realism-header {
+      margin-bottom: 10px;
     }
 
     .entry-id {
       font-size: 0.85rem;
       font-weight: 700;
       color: var(--accent-color);
+      margin-right: 6px;
     }
 
     .entry-handle {
@@ -299,20 +322,7 @@
       font-size: 0.95rem;
       line-height: 1.5;
       color: #4a4a4a;
-    }
-
-    .btn-refresh {
-      background: none;
-      border: none;
-      color: var(--accent-color);
-      font-size: 0.8rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: opacity 0.2s;
-    }
-
-    .btn-refresh:active {
-      opacity: 0.6;
+      margin-top: 8px;
     }
   </style>
 </head>
@@ -379,16 +389,22 @@
     <!-- Dynamic Glimpse of Realism Card -->
     <div class="section-title">A Glimpse of Realism</div>
     <div class="realism-card">
-      <div class="realism-header">
-        <div id="quoteContent" class="realism-quote-container">
-          <span id="quoteNumber" class="entry-id">#0000</span>
-          <span id="quoteHandle" class="entry-handle">@loading...</span>
-          <p id="quoteText" class="realism-quote" style="margin-top: 8px;">
-            "Loading thoughts..."
-          </p>
-        </div>
+      
+      <!-- Top Left Button -->
+      <div class="realism-top-actions">
         <button type="button" id="refreshBtn" class="btn-refresh">↻ Read Another</button>
       </div>
+
+      <div id="quoteContent" class="realism-quote-container">
+        <div class="realism-header">
+          <span id="quoteNumber" class="entry-id">#0000</span>
+          <span id="quoteHandle" class="entry-handle">@loading...</span>
+        </div>
+        <p id="quoteText" class="realism-quote">
+          "Loading thoughts..."
+        </p>
+      </div>
+
     </div>
 
   </div>
@@ -505,7 +521,6 @@
         document.getElementById('progressFill').style.width = `${percentage}%`;
       }
 
-      // Always display the very FIRST message on page load
       getFirstQuote();
     }
 
