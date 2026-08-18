@@ -87,7 +87,7 @@
     }
 
     .progress-fill {
-      width: 0.05%;
+      width: 0%;
       height: 100%;
       background: var(--accent-color);
       transition: width 0.3s ease;
@@ -123,7 +123,7 @@
       margin-bottom: 6px;
     }
 
-    /* Floating Tooltip */
+    /* Tooltip Bubble */
     .speech-bubble {
       position: absolute;
       top: -54px;
@@ -361,10 +361,13 @@
   </div>
 
   <script>
-    // 1. Initialize Supabase
     const SUPABASE_URL = 'https://zhfmysfwrduyayveaylc.supabase.co';
     const SUPABASE_KEY = 'Sb_publishable_03a4xF6WrtdH2Z4SLUzFiw_JZqrWATy';
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    
+    let supabaseClient = null;
+    if (window.supabase) {
+      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    }
 
     const baseNames = [
       "a_wandering_soul_",
@@ -380,81 +383,83 @@
       "the_midnight_wanderer_"
     ];
 
-    // UI Elements
-    const spinBtn = document.getElementById('spinBtn');
-    const usernameInput = document.getElementById('username');
-    const feelingForm = document.getElementById('feelingForm');
-    const refreshBtn = document.getElementById('refreshBtn');
+    document.addEventListener('DOMContentLoaded', () => {
+      const spinBtn = document.getElementById('spinBtn');
+      const usernameInput = document.getElementById('username');
+      const feelingForm = document.getElementById('feelingForm');
+      const refreshBtn = document.getElementById('refreshBtn');
 
-    // Spin Name Handler
-    spinBtn.addEventListener('click', () => {
-      const randomBase = baseNames[Math.floor(Math.random() * baseNames.length)];
-      usernameInput.value = randomBase;
-      usernameInput.focus();
+      if (spinBtn && usernameInput) {
+        spinBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const randomBase = baseNames[Math.floor(Math.random() * baseNames.length)];
+          usernameInput.value = randomBase;
+          usernameInput.focus();
+        });
+      }
+
+      if (feelingForm) {
+        feelingForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          if (!supabaseClient) return alert("Database connection error.");
+
+          const username = usernameInput.value;
+          const message = document.getElementById('message').value;
+          const igHandle = document.getElementById('igHandle').value;
+
+          const { error } = await supabaseClient
+            .from('submissions')
+            .insert([{ username, message, ig_handle: igHandle }]);
+
+          if (error) {
+            alert("Error submitting: " + error.message);
+          } else {
+            alert("Submitted successfully!");
+            document.getElementById('message').value = '';
+            document.getElementById('igHandle').value = '';
+            fetchData();
+          }
+        });
+      }
+
+      if (refreshBtn) {
+        refreshBtn.addEventListener('click', fetchData);
+      }
+
+      fetchData();
     });
 
-    // Close Bubble
     function closeBubble() {
       const bubble = document.getElementById('infoBubble');
       if (bubble) bubble.style.display = 'none';
     }
 
-    // Submit Form Handler
-    feelingForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const username = usernameInput.value;
-      const message = document.getElementById('message').value;
-      const igHandle = document.getElementById('igHandle').value;
-
-      const { data, error } = await supabase
-        .from('submissions')
-        .insert([{ username, message, ig_handle: igHandle }]);
-
-      if (error) {
-        alert("Error submitting: " + error.message);
-      } else {
-        alert("Your thought has been recorded successfully.");
-        document.getElementById('message').value = '';
-        document.getElementById('igHandle').value = '';
-        fetchData();
-      }
-    });
-
-    // Fetch Count & Latest Submission
     async function fetchData() {
-      // 1. Fetch total count
-      const { count, error: countErr } = await supabase
+      if (!supabaseClient) return;
+
+      const { count } = await supabaseClient
         .from('submissions')
         .select('*', { count: 'exact', head: true });
 
-      if (!countErr) {
-        const total = count || 0;
-        document.getElementById('counterText').innerText = `${total} / 2000`;
-        const percentage = Math.min((total / 2000) * 100, 100);
+      if (count !== null) {
+        document.getElementById('counterText').innerText = `${count} / 2000`;
+        const percentage = Math.min((count / 2000) * 100, 100);
         document.getElementById('progressFill').style.width = `${percentage}%`;
       }
 
-      // 2. Fetch latest submission
-      const { data, error } = await supabase
+      const { data } = await supabaseClient
         .from('submissions')
         .select('*')
         .order('created_at', { ascending: false })
         .limit(1);
 
-      if (!error && data && data.length > 0) {
+      if (data && data.length > 0) {
         const entry = data[0];
         document.getElementById('quoteNumber').innerText = `#${String(entry.id).padStart(4, '0')}`;
         document.getElementById('quoteHandle').innerText = `@${entry.username}`;
         document.getElementById('quoteText').innerText = `"${entry.message}"`;
       }
     }
-
-    // Read Another Handler
-    refreshBtn.addEventListener('click', fetchData);
-
-    // Initial Load
-    document.addEventListener('DOMContentLoaded', fetchData);
   </script>
 </body>
 </html>
