@@ -267,10 +267,12 @@
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
     }
 
+    /* Top row holding entry handle and top-right button */
     .realism-top-actions {
       display: flex;
-      justify-content: flex-start;
-      margin-bottom: 16px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
     }
 
     .btn-refresh {
@@ -290,10 +292,6 @@
 
     .btn-refresh:active {
       transform: scale(0.98);
-    }
-
-    .realism-header {
-      margin-bottom: 10px;
     }
 
     .entry-id {
@@ -390,16 +388,17 @@
     <div class="section-title">A Glimpse of Realism</div>
     <div class="realism-card">
       
-      <!-- Top Left Button -->
+      <!-- Top Actions Row -->
       <div class="realism-top-actions">
+        <div>
+          <span id="quoteNumber" class="entry-id">#0000</span>
+          <span id="quoteHandle" class="entry-handle">@loading...</span>
+        </div>
+        <!-- Top Right Orange Button -->
         <button type="button" id="refreshBtn" class="btn-refresh">↻ Read Another</button>
       </div>
 
       <div id="quoteContent" class="realism-quote-container">
-        <div class="realism-header">
-          <span id="quoteNumber" class="entry-id">#0000</span>
-          <span id="quoteHandle" class="entry-handle">@loading...</span>
-        </div>
         <p id="quoteText" class="realism-quote">
           "Loading thoughts..."
         </p>
