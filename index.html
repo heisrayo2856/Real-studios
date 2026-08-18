@@ -1,10 +1,13 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>2000 People: How Do You Feel About Life?</title>
+  
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     :root {
       --bg-color: #f7f4ef;
@@ -87,6 +90,7 @@
       width: 0.05%;
       height: 100%;
       background: var(--accent-color);
+      transition: width 0.3s ease;
     }
 
     .counter-text {
@@ -119,7 +123,7 @@
       margin-bottom: 6px;
     }
 
-    /* Floating eFootball-Style Bubble (Positioned higher) */
+    /* Floating Tooltip */
     .speech-bubble {
       position: absolute;
       top: -54px;
@@ -293,18 +297,16 @@
 
     <div class="progress-wrap">
       <div class="progress-bar">
-        <div class="progress-fill"></div>
+        <div id="progressFill" class="progress-fill"></div>
       </div>
-      <span class="counter-text">1 / 2000</span>
+      <span id="counterText" class="counter-text">0 / 2000</span>
     </div>
 
     <!-- Main Input Form -->
     <div class="card">
       <form id="feelingForm">
         
-        <!-- Username Input with Floating Tooltip -->
         <div class="form-group" style="margin-top: 48px;">
-          
           <div class="speech-bubble" id="infoBubble">
             <span>💡 Tap <b>Spin Name</b> to get a base handle, then append 3 characters (letters/numbers) as your personal sign!</span>
             <button type="button" class="bubble-close" onclick="closeBubble()">✕</button>
@@ -317,12 +319,12 @@
               id="username" 
               placeholder="a_wandering_soul_123" 
               maxlength="30"
+              required
             />
             <button type="button" id="spinBtn" class="btn-spin">Spin Name</button>
           </div>
         </div>
 
-        <!-- Updated Question Label -->
         <div class="form-group">
           <label for="message">How do you really feel about life?</label>
           <textarea 
@@ -332,7 +334,6 @@
           ></textarea>
         </div>
 
-        <!-- Instagram Handle -->
         <div class="form-group">
           <label for="igHandle">IG Handle (Optional, for numbering)</label>
           <input type="text" id="igHandle" placeholder="@yourhandle" />
@@ -347,19 +348,24 @@
     <div class="realism-card">
       <div class="realism-header">
         <div>
-          <span id="quoteNumber" class="entry-id">#0001</span>
-          <span id="quoteHandle" class="entry-handle">@first_real</span>
+          <span id="quoteNumber" class="entry-id">#0000</span>
+          <span id="quoteHandle" class="entry-handle">@loading...</span>
         </div>
         <button type="button" id="refreshBtn" class="btn-refresh">↻ Read Another</button>
       </div>
       <p id="quoteText" class="realism-quote">
-        "With the growth of Technology, screens and other stuffs are slowly drifting us away from our natural existence. I feel the need to stop and say what I'm really feeling right now."
+        "Loading latest thoughts..."
       </p>
     </div>
 
   </div>
 
   <script>
+    // 1. Initialize Supabase
+    const SUPABASE_URL = 'https://zhfmysfwrduyayveaylc.supabase.co';
+    const SUPABASE_KEY = 'Sb_publishable_03a4xF6WrtdH2Z4SLUzFiw_JZqrWATy';
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
     const baseNames = [
       "a_wandering_soul_",
       "the_quiet_observer_",
@@ -374,23 +380,82 @@
       "the_midnight_wanderer_"
     ];
 
+    // UI Elements
     const spinBtn = document.getElementById('spinBtn');
     const usernameInput = document.getElementById('username');
+    const feelingForm = document.getElementById('feelingForm');
+    const refreshBtn = document.getElementById('refreshBtn');
 
+    // Spin Name Handler
     spinBtn.addEventListener('click', () => {
       const randomBase = baseNames[Math.floor(Math.random() * baseNames.length)];
       usernameInput.value = randomBase;
       usernameInput.focus();
     });
 
+    // Close Bubble
     function closeBubble() {
       const bubble = document.getElementById('infoBubble');
-      if (bubble) {
-        bubble.style.display = 'none';
+      if (bubble) bubble.style.display = 'none';
+    }
+
+    // Submit Form Handler
+    feelingForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const username = usernameInput.value;
+      const message = document.getElementById('message').value;
+      const igHandle = document.getElementById('igHandle').value;
+
+      const { data, error } = await supabase
+        .from('submissions')
+        .insert([{ username, message, ig_handle: igHandle }]);
+
+      if (error) {
+        alert("Error submitting: " + error.message);
+      } else {
+        alert("Your thought has been recorded successfully.");
+        document.getElementById('message').value = '';
+        document.getElementById('igHandle').value = '';
+        fetchData();
+      }
+    });
+
+    // Fetch Count & Latest Submission
+    async function fetchData() {
+      // 1. Fetch total count
+      const { count, error: countErr } = await supabase
+        .from('submissions')
+        .select('*', { count: 'exact', head: true });
+
+      if (!countErr) {
+        const total = count || 0;
+        document.getElementById('counterText').innerText = `${total} / 2000`;
+        const percentage = Math.min((total / 2000) * 100, 100);
+        document.getElementById('progressFill').style.width = `${percentage}%`;
+      }
+
+      // 2. Fetch latest submission
+      const { data, error } = await supabase
+        .from('submissions')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(1);
+
+      if (!error && data && data.length > 0) {
+        const entry = data[0];
+        document.getElementById('quoteNumber').innerText = `#${String(entry.id).padStart(4, '0')}`;
+        document.getElementById('quoteHandle').innerText = `@${entry.username}`;
+        document.getElementById('quoteText').innerText = `"${entry.message}"`;
       }
     }
+
+    // Read Another Handler
+    refreshBtn.addEventListener('click', fetchData);
+
+    // Initial Load
+    document.addEventListener('DOMContentLoaded', fetchData);
   </script>
 </body>
 </html>
-
 
