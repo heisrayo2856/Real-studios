@@ -41,7 +41,11 @@
 
     /* Header Badges & Titles */
     .badge-container {
-      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
       margin-bottom: 16px;
     }
 
@@ -53,6 +57,31 @@
       font-size: 0.8rem;
       font-weight: 600;
       color: #666;
+    }
+
+    .ig-collection-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #eee8e0;
+      color: var(--text-main);
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .ig-collection-btn:hover {
+      background: var(--accent-color);
+      color: #ffffff;
+    }
+
+    .ig-icon {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
     }
 
     .title {
@@ -231,7 +260,12 @@
       transition: background 0.2s;
     }
 
-    .btn-spin:hover, .submit-btn:hover, .btn-refresh:hover {
+    .btn-spin:disabled {
+      background: #c5b8b0;
+      cursor: not-allowed;
+    }
+
+    .btn-spin:hover:not(:disabled), .submit-btn:hover, .btn-refresh:hover {
       background: var(--accent-hover);
     }
 
@@ -247,49 +281,6 @@
       cursor: pointer;
       margin-top: 8px;
       transition: background 0.2s;
-    }
-
-    /* Post-Submit Instagram Notice & Button */
-    .ig-post-submit {
-      margin-top: 16px;
-      padding-top: 16px;
-      border-top: 1px dashed var(--border-color);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      text-align: center;
-    }
-
-    .ig-post-text {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      line-height: 1.4;
-    }
-
-    .ig-collection-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: #eee8e0;
-      color: var(--text-main);
-      text-decoration: none;
-      padding: 8px 16px;
-      border-radius: 12px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      transition: background 0.2s ease, color 0.2s ease;
-    }
-
-    .ig-collection-btn:hover {
-      background: var(--accent-color);
-      color: #ffffff;
-    }
-
-    .ig-icon {
-      width: 16px;
-      height: 16px;
-      fill: currentColor;
     }
 
     /* Realism Section */
@@ -310,6 +301,7 @@
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
     }
 
+    /* Top row holding entry handle and top-right button */
     .realism-top-actions {
       display: flex;
       justify-content: space-between;
@@ -371,6 +363,13 @@
   <div class="container">
     <div class="badge-container">
       <span class="tag-badge">#HDYFBL</span>
+      <!-- Instagram Collections Button -->
+      <a href="https://instagram.com/real_studi0s" target="_blank" rel="noopener noreferrer" class="ig-collection-btn">
+        <svg class="ig-icon" viewBox="0 0 24 24">
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+        </svg>
+        <span>@real_studi0s</span>
+      </a>
     </div>
     
     <h1 class="title">2000 People: How Do You Feel About Life?</h1>
@@ -425,28 +424,19 @@
 
         <button type="submit" class="submit-btn">Submit</button>
       </form>
-
-      <!-- Button after Submit for Instagram Comments Page -->
-      <div class="ig-post-submit">
-        <p class="ig-post-text">Selected entries are posted as curated quotes on Instagram.</p>
-        <a href="https://instagram.com/real_studi0s" target="_blank" rel="noopener noreferrer" class="ig-collection-btn">
-          <svg class="ig-icon" viewBox="0 0 24 24">
-            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-          </svg>
-          <span>View on @real_studi0s</span>
-        </a>
-      </div>
     </div>
 
     <!-- Dynamic Glimpse of Realism Card -->
     <div class="section-title">A Glimpse of Realism</div>
     <div class="realism-card">
       
+      <!-- Top Actions Row -->
       <div class="realism-top-actions">
         <div>
           <span id="quoteNumber" class="entry-id">#0000</span>
           <span id="quoteHandle" class="entry-handle">@loading...</span>
         </div>
+        <!-- Top Right Orange Button -->
         <button type="button" id="refreshBtn" class="btn-refresh">↻ Read Another</button>
       </div>
 
@@ -470,18 +460,40 @@
       supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     }
 
+    // Processed base names from pdf list
     const baseNames = [
-      "a_wandering_soul_",
-      "the_quiet_observer_",
-      "a_seeking_heart_",
-      "an_echo_in_transit_",
-      "a_resting_mind_",
-      "the_silent_listener_",
-      "an_honest_stranger_",
-      "a_lingering_thought_",
-      "the_patient_watcher_",
-      "a_solitary_drift_",
-      "the_midnight_wanderer_"
+      "the_midnight_thinker_", "the_midnight_wanderer_", "the_modest_traveler_", "the_patient_dreamer_",
+      "the_patient_heartbeat_", "the_patient_listener_", "the_patient_passenger_", "the_patient_wanderer_",
+      "the_patient_watcher_", "the_quiet_compass_", "the_quiet_observer_", "the_quiet_voyager_",
+      "the_serene_listener_", "the_silent_current_", "the_silent_listener_", "the_silent_spectator_",
+      "the_simple_bystander_", "the_soft_murmur_", "the_soft_resonance_", "the_soft_shadow_",
+      "the_solitary_path_", "the_solitary_seeker_", "the_slow_observer_", "the_still_heartbeat_",
+      "the_still_observer_", "the_subtle_footprint_", "the_timeless_soul_", "an_unhurried_presence_",
+      "an_unhurried_traveler_", "an_unhurried_voice_", "an_uncharted_spirit_", "an_unmarked_path_",
+      "an_unsung_melody_", "an_unwritten_chapter_", "an_unwritten_voice_", "an_wandering_heartbeat_",
+      "the_calm_shadow_", "the_deliberate_pause_", "the_distant_traveler_", "the_evening_echo_",
+      "the_evening_thinker_", "the_fragile_heartbeat_", "the_fragile_observer_", "the_fragile_spirit_",
+      "the_gentle_current_", "the_gentle_echo_", "the_grounded_mind_", "the_hidden_wanderer_",
+      "the_lingering_spark_", "the_midnight_listener_", "the_midnight_observer_", "the_midnight_soul_",
+      "a_serene_spectator_", "a_silent_resonance_", "a_slow_footprint_", "a_soft_echo_",
+      "a_soft_horizon_", "a_solitary_drift_", "a_standard_passenger_", "a_steady_anchor_",
+      "a_steady_breath_", "a_still_presence_", "a_still_traveler_", "a_subtle_footprint_",
+      "a_subtle_horizon_", "a_subtle_presence_", "a_subtle_thinker_", "a_temporary_visitor_",
+      "a_wandering_thoughts_", "an_echo_in_transit_", "an_earnest_soul_", "an_evening_watcher_",
+      "an_honest_compass_", "an_honest_stranger_", "an_honest_traveler_", "an_honest_witness_",
+      "an_interior_compass_", "an_interior_echo_", "an_interior_journey_", "an_interior_landscape_",
+      "an_interior_spark_", "an_introspective_ghost_", "an_isolated_voice_", "an_open_horizon_",
+      "an_open_mind_", "an_open_stranger_", "a_calm_observer_", "a_calm_resonance_",
+      "a_calm_specter_", "a_distant_lantern_", "a_distant_reflection_", "a_distant_voice_",
+      "a_fleeting_moment_", "a_gentle_presence_", "a_gentle_stranger_", "a_grounded_spirit_",
+      "a_honest_reflection_", "a_humble_presence_", "a_humble_spectator_", "a_humble_thinker_",
+      "a_lingering_path_", "a_lingering_thought_", "a_lingering_voice_", "a_listening_heart_",
+      "a_listening_soul_", "a_nocturnal_mind_", "a_nocturnal_observer_", "a_open_landscape_",
+      "a_passing_passenger_", "a_passing_shadow_", "a_passing_thinker_", "a_passing_thought_",
+      "a_passing_wave_", "a_peaceful_solitude_", "a_quiet_horizon_", "a_quiet_listener_",
+      "a_quiet_witness_", "a_reflective_spark_", "a_reflective_voice_", "a_resting_mind_",
+      "a_resting_spirit_", "a_resting_stranger_", "a_resting_traveler_", "a_searching_gaze_",
+      "a_seeking_heart_", "a_serene_footprint_", "a_serene_mind_"
     ];
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -520,6 +532,19 @@
           e.preventDefault();
           if (!supabaseClient) return alert("Database connection error.");
 
+          const username = usernameInput.value.trim();
+
+          // Lock username check against Supabase
+          const { data: existingUser } = await supabaseClient
+            .from('submissions')
+            .select('username')
+            .eq('username', username)
+            .maybeSingle();
+
+          if (existingUser) {
+            return alert("This username has already been used and locked. Please modify your handle or click 'Spin Name' again.");
+          }
+
           const message = messageInput.value.trim();
           const words = message.split(/\s+/).filter(w => w.length > 0);
 
@@ -527,7 +552,6 @@
             return alert(`Please shorten your message to ${MAX_WORDS} words or fewer.`);
           }
 
-          const username = usernameInput.value;
           const igHandle = document.getElementById('igHandle').value;
 
           const { error } = await supabaseClient
@@ -538,6 +562,7 @@
             alert("Error submitting: " + error.message);
           } else {
             alert("Submitted successfully!");
+            usernameInput.value = '';
             messageInput.value = '';
             document.getElementById('igHandle').value = '';
             wordCountDisplay.innerText = `0 / ${MAX_WORDS} words`;
