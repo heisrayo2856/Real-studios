@@ -301,6 +301,7 @@
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
     }
 
+    /* Top row holding entry handle and top-right button */
     .realism-top-actions {
       display: flex;
       justify-content: space-between;
@@ -362,6 +363,7 @@
   <div class="container">
     <div class="badge-container">
       <span class="tag-badge">#HDYFBL</span>
+      <!-- Instagram Collections Button -->
       <a href="https://instagram.com/real_studi0s" target="_blank" rel="noopener noreferrer" class="ig-collection-btn">
         <svg class="ig-icon" viewBox="0 0 24 24">
           <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
@@ -386,7 +388,7 @@
         
         <div class="form-group" style="margin-top: 48px;">
           <div class="speech-bubble" id="infoBubble">
-            <span>💡 Tap <b>Spin Name</b> to get a base handle, then append 3 characters as your personal sign!</span>
+            <span>💡 Tap <b>Spin Name</b> to get a base handle, then append 3 characters (letters/numbers) as your personal sign!</span>
             <button type="button" class="bubble-close" onclick="closeBubble()">✕</button>
           </div>
 
@@ -420,7 +422,7 @@
           <input type="text" id="igHandle" placeholder="@yourhandle" />
         </div>
 
-        <button type="submit" class="submit-btn">Submit</button>
+        <button type="submit" class="submit-btn" id="submitBtn">Submit</button>
       </form>
     </div>
 
@@ -428,11 +430,13 @@
     <div class="section-title">A Glimpse of Realism</div>
     <div class="realism-card">
       
+      <!-- Top Actions Row -->
       <div class="realism-top-actions">
         <div>
           <span id="quoteNumber" class="entry-id">#0000</span>
           <span id="quoteHandle" class="entry-handle">@loading...</span>
         </div>
+        <!-- Top Right Orange Button -->
         <button type="button" id="refreshBtn" class="btn-refresh">↻ Read Another</button>
       </div>
 
@@ -517,7 +521,8 @@
         spinBtn.addEventListener('click', (e) => {
           e.preventDefault();
           const randomBase = baseNames[Math.floor(Math.random() * baseNames.length)];
-          usernameInput.value = randomBase;
+          const randomChars = Math.random().toString(36).substring(2, 5);
+          usernameInput.value = randomBase + randomChars;
           usernameInput.focus();
         });
       }
@@ -527,34 +532,48 @@
           e.preventDefault();
           if (!supabaseClient) return alert("Database connection error.");
 
+          const submitBtn = document.getElementById('submitBtn');
           const username = usernameInput.value.trim();
+          const message = messageInput.value.trim();
+          const igHandle = document.getElementById('igHandle').value.trim();
 
-          // Username lock check: prevents duplicate usage
-          const { data: existingUser } = await supabaseClient
+          const words = message.split(/\s+/).filter(w => w.length > 0);
+          if (words.length > MAX_WORDS) {
+            return alert(`Please shorten your message to ${MAX_WORDS} words or fewer.`);
+          }
+
+          submitBtn.disabled = true;
+          submitBtn.innerText = "Submitting...";
+
+          // Check if username is taken
+          const { data: existingUser, error: checkError } = await supabaseClient
             .from('submissions')
             .select('username')
             .eq('username', username)
             .maybeSingle();
 
+          if (checkError) {
+            submitBtn.disabled = false;
+            submitBtn.innerText = "Submit";
+            return alert("Error checking username: " + checkError.message);
+          }
+
           if (existingUser) {
-            return alert("This username has already been used and locked. Please modify your handle or click 'Spin Name' again.");
+            submitBtn.disabled = false;
+            submitBtn.innerText = "Submit";
+            return alert("This username has already been taken. Click 'Spin Name' to generate a new handle.");
           }
 
-          const message = messageInput.value.trim();
-          const words = message.split(/\s+/).filter(w => w.length > 0);
-
-          if (words.length > MAX_WORDS) {
-            return alert(`Please shorten your message to ${MAX_WORDS} words or fewer.`);
-          }
-
-          const igHandle = document.getElementById('igHandle').value;
-
-          const { error } = await supabaseClient
+          // Insert submission into Supabase
+          const { error: insertError } = await supabaseClient
             .from('submissions')
             .insert([{ username, message, ig_handle: igHandle }]);
 
-          if (error) {
-            alert("Error submitting: " + error.message);
+          submitBtn.disabled = false;
+          submitBtn.innerText = "Submit";
+
+          if (insertError) {
+            alert("Error submitting: " + insertError.message);
           } else {
             alert("Submitted successfully!");
             usernameInput.value = '';
@@ -582,11 +601,11 @@
     async function fetchData() {
       if (!supabaseClient) return;
 
-      const { count } = await supabaseClient
+      const { count, error } = await supabaseClient
         .from('submissions')
         .select('*', { count: 'exact', head: true });
 
-      if (count !== null && count !== undefined) {
+      if (!error && count !== null) {
         document.getElementById('counterText').innerText = `${count} / 2000`;
         const percentage = Math.min((count / 2000) * 100, 100);
         document.getElementById('progressFill').style.width = `${percentage}%`;
@@ -605,8 +624,10 @@
         .limit(1);
 
       if (!error && data && data.length > 0) {
-        const entry = data[0];
-        updateQuoteUI(entry);
+        updateQuoteUI(data[0]);
+      } else {
+        document.getElementById('quoteHandle').innerText = "@none_yet";
+        document.getElementById('quoteText').innerText = '"No submissions yet. Be the first to share your thoughts."';
       }
     }
 
@@ -623,8 +644,7 @@
 
         if (!error && data && data.length > 0) {
           const randomIndex = Math.floor(Math.random() * data.length);
-          const entry = data[randomIndex];
-          updateQuoteUI(entry);
+          updateQuoteUI(data[randomIndex]);
         }
         quoteContainer.classList.remove('fade-out');
       }, 200);
