@@ -466,6 +466,8 @@
     const MAX_WORDS = 150;
     
     let supabaseClient = null;
+    let currentQuoteId = null; // Tracks current displayed quote ID
+
     if (window.supabase) {
       supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     }
@@ -481,7 +483,10 @@
       "a_lingering_thought_",
       "the_patient_watcher_",
       "a_solitary_drift_",
-      "the_midnight_wanderer_"
+      "the_midnight_wanderer_",
+      "silent_echo_",
+      "pixel_thinker_",
+      "real_observer_"
     ];
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -631,14 +636,21 @@
           .select('*');
 
         if (!error && data && data.length > 0) {
-          const randomIndex = Math.floor(Math.random() * data.length);
-          updateQuoteUI(data[randomIndex]);
+          // Filter out the currently displayed quote to guarantee a new one on single click
+          const availableQuotes = data.filter(item => item.id !== currentQuoteId);
+          
+          // Fallback to full list if only 1 total item exists
+          const pool = availableQuotes.length > 0 ? availableQuotes : data;
+          const randomIndex = Math.floor(Math.random() * pool.length);
+          
+          updateQuoteUI(pool[randomIndex]);
         }
         quoteContainer.classList.remove('fade-out');
       }, 200);
     }
 
     function updateQuoteUI(entry) {
+      currentQuoteId = entry.id; // Save current ID to ensure the next click swaps to a different quote
       document.getElementById('quoteNumber').innerText = `#${String(entry.id).padStart(4, '0')}`;
       document.getElementById('quoteHandle').innerText = `@${entry.username}`;
       document.getElementById('quoteText').innerText = `"${entry.message}"`;
