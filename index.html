@@ -142,7 +142,7 @@
     /* Tooltip Bubble */
     .speech-bubble {
       position: absolute;
-      top: -54px;
+      top: -58px;
       left: 0;
       right: 0;
       background: #2b2b2b;
@@ -387,9 +387,9 @@
     <div class="card">
       <form id="feelingForm">
         
-        <div class="form-group" style="margin-top: 48px;">
+        <div class="form-group" style="margin-top: 52px;">
           <div class="speech-bubble" id="infoBubble">
-            <span>💡 Tap <b>Spin Name</b> to get a base handle, then append 3 characters (letters/numbers) as your personal sign!</span>
+            <span>💡 Tap <b>Spin Name</b> to get a base handle, or write your preferred username directly!</span>
             <button type="button" class="bubble-close" onclick="closeBubble()">✕</button>
           </div>
 
@@ -466,7 +466,7 @@
     const MAX_WORDS = 150;
     
     let supabaseClient = null;
-    let currentQuoteId = null; // Tracks current displayed quote ID
+    let currentQuoteId = null;
 
     if (window.supabase) {
       supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -636,10 +636,7 @@
           .select('*');
 
         if (!error && data && data.length > 0) {
-          // Filter out the currently displayed quote to guarantee a new one on single click
           const availableQuotes = data.filter(item => item.id !== currentQuoteId);
-          
-          // Fallback to full list if only 1 total item exists
           const pool = availableQuotes.length > 0 ? availableQuotes : data;
           const randomIndex = Math.floor(Math.random() * pool.length);
           
@@ -650,7 +647,7 @@
     }
 
     function updateQuoteUI(entry) {
-      currentQuoteId = entry.id; // Save current ID to ensure the next click swaps to a different quote
+      currentQuoteId = entry.id;
       document.getElementById('quoteNumber').innerText = `#${String(entry.id).padStart(4, '0')}`;
       document.getElementById('quoteHandle').innerText = `@${entry.username}`;
       document.getElementById('quoteText').innerText = `"${entry.message}"`;
