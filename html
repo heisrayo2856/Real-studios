@@ -4,19 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>2000 People: How Do You Feel About Life?</title>
-
-  <!-- Social Media & Open Graph Meta Tags -->
-  <meta property="og:title" content="2000 People: How Do You Feel About Life?" />
-  <meta property="og:description" content="A quiet space to step off the wave, pause, and find what's real. Read authentic thoughts and share your own." />
-  <meta property="og:type" content="website" />
-  <meta property="og:image" content="https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?auto=format&fit=crop&w=1200&q=80" />
   
-  <!-- Twitter Card Meta Tags -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="2000 People: How Do You Feel About Life?" />
-  <meta name="twitter:description" content="A quiet space to step off the wave, pause, and find what's real." />
-  <meta name="twitter:image" content="https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?auto=format&fit=crop&w=1200&q=80" />
-
   <!-- Supabase JS Client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -53,7 +41,11 @@
 
     /* Header Badges & Titles */
     .badge-container {
-      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
       margin-bottom: 16px;
     }
 
@@ -65,6 +57,31 @@
       font-size: 0.8rem;
       font-weight: 600;
       color: #666;
+    }
+
+    .ig-collection-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #eee8e0;
+      color: var(--text-main);
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .ig-collection-btn:hover {
+      background: var(--accent-color);
+      color: #ffffff;
+    }
+
+    .ig-icon {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
     }
 
     .title {
@@ -154,7 +171,7 @@
     /* Tooltip Bubble */
     .speech-bubble {
       position: absolute;
-      top: -58px;
+      top: -54px;
       left: 0;
       right: 0;
       background: #2b2b2b;
@@ -243,7 +260,12 @@
       transition: background 0.2s;
     }
 
-    .btn-spin:hover, .submit-btn:hover, .btn-refresh:hover, .share-main-btn:hover {
+    .btn-spin:disabled {
+      background: #c5b8b0;
+      cursor: not-allowed;
+    }
+
+    .btn-spin:hover:not(:disabled), .submit-btn:hover, .btn-refresh:hover {
       background: var(--accent-hover);
     }
 
@@ -259,116 +281,6 @@
       cursor: pointer;
       margin-top: 8px;
       transition: background 0.2s;
-    }
-
-    /* Share Section Styling */
-    .share-section {
-      margin-top: 20px;
-      padding-top: 16px;
-      border-top: 1px dashed var(--border-color);
-      text-align: center;
-    }
-
-    .share-title {
-      font-size: 0.8rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 12px;
-    }
-
-    .share-main-btn {
-      width: 100%;
-      background: var(--accent-color);
-      color: #ffffff;
-      border: none;
-      border-radius: 10px;
-      padding: 12px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: background 0.2s;
-    }
-
-    .share-icons-grid {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 12px;
-    }
-
-    .social-btn {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: #eee8e0;
-      border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      color: var(--text-main);
-      text-decoration: none;
-      transition: background 0.2s, transform 0.1s;
-    }
-
-    .social-btn:hover {
-      background: var(--border-color);
-      transform: translateY(-2px);
-    }
-
-    .social-btn svg {
-      width: 18px;
-      height: 18px;
-      fill: currentColor;
-    }
-
-    /* Post-Submit Instagram Notice & Button */
-    .ig-post-submit {
-      margin-top: 16px;
-      padding-top: 16px;
-      border-top: 1px dashed var(--border-color);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      text-align: center;
-    }
-
-    .ig-post-text {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      line-height: 1.4;
-    }
-
-        .ig-collection-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--accent-color);
-      color: #ffffff;
-      text-decoration: none;
-      padding: 10px 20px;
-      border-radius: 10px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      transition: background 0.2s ease;
-    }
-
-    .ig-collection-btn:hover {
-      background: var(--accent-hover);
-      color: #ffffff;
-    }
-
-
-    .ig-icon {
-      width: 16px;
-      height: 16px;
-      fill: currentColor;
     }
 
     /* Realism Section */
@@ -389,6 +301,7 @@
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
     }
 
+    /* Top row holding entry handle and top-right button */
     .realism-top-actions {
       display: flex;
       justify-content: space-between;
@@ -450,8 +363,15 @@
   <div class="container">
     <div class="badge-container">
       <span class="tag-badge">#HDYFBL</span>
+      <!-- Instagram Collections Button -->
+      <a href="https://instagram.com/real_studi0s" target="_blank" rel="noopener noreferrer" class="ig-collection-btn">
+        <svg class="ig-icon" viewBox="0 0 24 24">
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+        </svg>
+        <span>@real_studi0s</span>
+      </a>
     </div>
-
+    
     <h1 class="title">2000 People: How Do You Feel About Life?</h1>
     <p class="subtitle">A quiet space to step off the wave, pause, and find what's real.</p>
 
@@ -465,19 +385,19 @@
     <!-- Main Input Form -->
     <div class="card">
       <form id="feelingForm">
-
-        <div class="form-group" style="margin-top: 52px;">
+        
+        <div class="form-group" style="margin-top: 48px;">
           <div class="speech-bubble" id="infoBubble">
-            <span>💡 Tap <b>Spin Name</b> to get a base handle, or write your preferred username directly!</span>
+            <span>💡 Tap <b>Spin Name</b> to get a base handle, then append 3 characters (letters/numbers) as your personal sign!</span>
             <button type="button" class="bubble-close" onclick="closeBubble()">✕</button>
           </div>
 
           <label for="username">Create Username</label>
           <div class="input-with-btn">
-            <input
-              type="text"
-              id="username"
-              placeholder="a_wandering_soul_123"
+            <input 
+              type="text" 
+              id="username" 
+              placeholder="a_wandering_soul_123" 
               maxlength="30"
               required
             />
@@ -487,9 +407,9 @@
 
         <div class="form-group">
           <label for="message">How do you really feel about life?</label>
-          <textarea
-            id="message"
-            placeholder="Your real message. Step away from the noise."
+          <textarea 
+            id="message" 
+            placeholder="Your real message. Step away from the noise." 
             required
           ></textarea>
           <div class="field-footer">
@@ -498,64 +418,25 @@
         </div>
 
         <div class="form-group">
-          <label for="igHandle">IG Handle</label>
+          <label for="igHandle">IG Handle (Optional, for numbering)</label>
           <input type="text" id="igHandle" placeholder="@yourhandle" />
         </div>
 
-        <button type="submit" class="submit-btn" id="submitBtn">Submit</button>
+        <button type="submit" class="submit-btn">Submit</button>
       </form>
-
-      <!-- Share Website Section -->
-      <div class="share-section">
-        <div class="share-title">Share this project</div>
-        <button type="button" class="share-main-btn" onclick="shareNative()">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
-          </svg>
-          Share with Friends
-        </button>
-
-        <div class="share-icons-grid">
-          <!-- X / Twitter -->
-          <a id="shareTwitter" target="_blank" rel="noopener noreferrer" class="social-btn" title="Share on X">
-            <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-          </a>
-          <!-- WhatsApp -->
-          <a id="shareWhatsApp" target="_blank" rel="noopener noreferrer" class="social-btn" title="Share on WhatsApp">
-            <svg viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.572-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-          </a>
-          <!-- Telegram -->
-          <a id="shareTelegram" target="_blank" rel="noopener noreferrer" class="social-btn" title="Share on Telegram">
-            <svg viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.121l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.128.832.941z"/></svg>
-          </a>
-          <!-- Copy Link -->
-          <button type="button" class="social-btn" onclick="copySiteLink()" title="Copy Link">
-            <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-          </button>
-        </div>
-      </div>
-
-      <!-- Button after Submit for Instagram Comments Page -->
-      <div class="ig-post-submit">
-        <p class="ig-post-text">Selected entries are posted as curated quotes on Instagram.</p>
-        <a href="https://instagram.com/real_studi0s" target="_blank" rel="noopener noreferrer" class="ig-collection-btn">
-          <svg class="ig-icon" viewBox="0 0 24 24">
-            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-          </svg>
-          <span>View on @real_studi0s</span>
-        </a>
-      </div>
     </div>
 
     <!-- Dynamic Glimpse of Realism Card -->
     <div class="section-title">A Glimpse of Realism</div>
     <div class="realism-card">
-
+      
+      <!-- Top Actions Row -->
       <div class="realism-top-actions">
         <div>
           <span id="quoteNumber" class="entry-id">#0000</span>
           <span id="quoteHandle" class="entry-handle">@loading...</span>
         </div>
+        <!-- Top Right Orange Button -->
         <button type="button" id="refreshBtn" class="btn-refresh">↻ Read Another</button>
       </div>
 
@@ -573,34 +454,49 @@
     const SUPABASE_URL = 'https://zhfmysfwrduyayveaylc.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpoZm15c2Z3cmR1eWF5dmVheWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcwNjM5MDIsImV4cCI6MjEwMjYzOTkwMn0.RRCxz-bhiT92VVvOo4rpEt77VNeuVqtju9oDwHE_6o0';
     const MAX_WORDS = 150;
-
+    
     let supabaseClient = null;
-    let currentQuoteId = null;
-
     if (window.supabase) {
       supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     }
 
+    // Processed base names from pdf list
     const baseNames = [
-      "a_wandering_soul_",
-      "the_quiet_observer_",
-      "a_seeking_heart_",
-      "an_echo_in_transit_",
-      "a_resting_mind_",
-      "the_silent_listener_",
-      "an_honest_stranger_",
-      "a_lingering_thought_",
-      "the_patient_watcher_",
-      "a_solitary_drift_",
-      "the_midnight_wanderer_",
-      "silent_echo_",
-      "pixel_thinker_",
-      "real_observer_"
+      "the_midnight_thinker_", "the_midnight_wanderer_", "the_modest_traveler_", "the_patient_dreamer_",
+      "the_patient_heartbeat_", "the_patient_listener_", "the_patient_passenger_", "the_patient_wanderer_",
+      "the_patient_watcher_", "the_quiet_compass_", "the_quiet_observer_", "the_quiet_voyager_",
+      "the_serene_listener_", "the_silent_current_", "the_silent_listener_", "the_silent_spectator_",
+      "the_simple_bystander_", "the_soft_murmur_", "the_soft_resonance_", "the_soft_shadow_",
+      "the_solitary_path_", "the_solitary_seeker_", "the_slow_observer_", "the_still_heartbeat_",
+      "the_still_observer_", "the_subtle_footprint_", "the_timeless_soul_", "an_unhurried_presence_",
+      "an_unhurried_traveler_", "an_unhurried_voice_", "an_uncharted_spirit_", "an_unmarked_path_",
+      "an_unsung_melody_", "an_unwritten_chapter_", "an_unwritten_voice_", "an_wandering_heartbeat_",
+      "the_calm_shadow_", "the_deliberate_pause_", "the_distant_traveler_", "the_evening_echo_",
+      "the_evening_thinker_", "the_fragile_heartbeat_", "the_fragile_observer_", "the_fragile_spirit_",
+      "the_gentle_current_", "the_gentle_echo_", "the_grounded_mind_", "the_hidden_wanderer_",
+      "the_lingering_spark_", "the_midnight_listener_", "the_midnight_observer_", "the_midnight_soul_",
+      "a_serene_spectator_", "a_silent_resonance_", "a_slow_footprint_", "a_soft_echo_",
+      "a_soft_horizon_", "a_solitary_drift_", "a_standard_passenger_", "a_steady_anchor_",
+      "a_steady_breath_", "a_still_presence_", "a_still_traveler_", "a_subtle_footprint_",
+      "a_subtle_horizon_", "a_subtle_presence_", "a_subtle_thinker_", "a_temporary_visitor_",
+      "a_wandering_thoughts_", "an_echo_in_transit_", "an_earnest_soul_", "an_evening_watcher_",
+      "an_honest_compass_", "an_honest_stranger_", "an_honest_traveler_", "an_honest_witness_",
+      "an_interior_compass_", "an_interior_echo_", "an_interior_journey_", "an_interior_landscape_",
+      "an_interior_spark_", "an_introspective_ghost_", "an_isolated_voice_", "an_open_horizon_",
+      "an_open_mind_", "an_open_stranger_", "a_calm_observer_", "a_calm_resonance_",
+      "a_calm_specter_", "a_distant_lantern_", "a_distant_reflection_", "a_distant_voice_",
+      "a_fleeting_moment_", "a_gentle_presence_", "a_gentle_stranger_", "a_grounded_spirit_",
+      "a_honest_reflection_", "a_humble_presence_", "a_humble_spectator_", "a_humble_thinker_",
+      "a_lingering_path_", "a_lingering_thought_", "a_lingering_voice_", "a_listening_heart_",
+      "a_listening_soul_", "a_nocturnal_mind_", "a_nocturnal_observer_", "a_open_landscape_",
+      "a_passing_passenger_", "a_passing_shadow_", "a_passing_thinker_", "a_passing_thought_",
+      "a_passing_wave_", "a_peaceful_solitude_", "a_quiet_horizon_", "a_quiet_listener_",
+      "a_quiet_witness_", "a_reflective_spark_", "a_reflective_voice_", "a_resting_mind_",
+      "a_resting_spirit_", "a_resting_stranger_", "a_resting_traveler_", "a_searching_gaze_",
+      "a_seeking_heart_", "a_serene_footprint_", "a_serene_mind_"
     ];
 
     document.addEventListener('DOMContentLoaded', () => {
-      setupShareLinks();
-
       const spinBtn = document.getElementById('spinBtn');
       const usernameInput = document.getElementById('username');
       const messageInput = document.getElementById('message');
@@ -636,46 +532,34 @@
           e.preventDefault();
           if (!supabaseClient) return alert("Database connection error.");
 
-          const submitBtn = document.getElementById('submitBtn');
           const username = usernameInput.value.trim();
-          const message = messageInput.value.trim();
-          const igHandle = document.getElementById('igHandle').value.trim();
 
-          const words = message.split(/\s+/).filter(w => w.length > 0);
-          if (words.length > MAX_WORDS) {
-            return alert(`Please shorten your message to ${MAX_WORDS} words or fewer.`);
-          }
-
-          submitBtn.disabled = true;
-          submitBtn.innerText = "Submitting...";
-
-          const { data: existingUser, error: checkError } = await supabaseClient
+          // Lock username check against Supabase
+          const { data: existingUser } = await supabaseClient
             .from('submissions')
             .select('username')
             .eq('username', username)
             .maybeSingle();
 
-          if (checkError) {
-            submitBtn.disabled = false;
-            submitBtn.innerText = "Submit";
-            return alert("Error checking username: " + checkError.message);
-          }
-
           if (existingUser) {
-            submitBtn.disabled = false;
-            submitBtn.innerText = "Submit";
-            return alert("This username is already taken. Please append characters or click 'Spin Name' again.");
+            return alert("This username has already been used and locked. Please modify your handle or click 'Spin Name' again.");
           }
 
-          const { error: insertError } = await supabaseClient
+          const message = messageInput.value.trim();
+          const words = message.split(/\s+/).filter(w => w.length > 0);
+
+          if (words.length > MAX_WORDS) {
+            return alert(`Please shorten your message to ${MAX_WORDS} words or fewer.`);
+          }
+
+          const igHandle = document.getElementById('igHandle').value;
+
+          const { error } = await supabaseClient
             .from('submissions')
             .insert([{ username, message, ig_handle: igHandle }]);
 
-          submitBtn.disabled = false;
-          submitBtn.innerText = "Submit";
-
-          if (insertError) {
-            alert("Error submitting: " + insertError.message);
+          if (error) {
+            alert("Error submitting: " + error.message);
           } else {
             alert("Submitted successfully!");
             usernameInput.value = '';
@@ -700,48 +584,14 @@
       if (bubble) bubble.style.display = 'none';
     }
 
-    /* Social Sharing Helpers */
-    function setupShareLinks() {
-      const pageUrl = encodeURIComponent(window.location.href);
-      const text = encodeURIComponent("2000 People: How Do You Feel About Life? A quiet space to step off the wave, pause, and find what's real.");
-
-      document.getElementById('shareTwitter').href = `https://twitter.com/intent/tweet?url=${pageUrl}&text=${text}`;
-      document.getElementById('shareWhatsApp').href = `https://api.whatsapp.com/send?text=${text}%20${pageUrl}`;
-      document.getElementById('shareTelegram').href = `https://t.me/share/url?url=${pageUrl}&text=${text}`;
-    }
-
-    async function shareNative() {
-      if (navigator.share) {
-        try {
-          await navigator.share({
-            title: "2000 People: How Do You Feel About Life?",
-            text: "A quiet space to step off the wave, pause, and find what's real.",
-            url: window.location.href,
-          });
-        } catch (err) {
-          if (err.name !== 'AbortError') console.error('Share failed:', err);
-        }
-      } else {
-        copySiteLink();
-      }
-    }
-
-    function copySiteLink() {
-      navigator.clipboard.writeText(window.location.href).then(() => {
-        alert("Link copied to clipboard!");
-      }).catch(() => {
-        alert("Failed to copy link.");
-      });
-    }
-
     async function fetchData() {
       if (!supabaseClient) return;
 
-      const { count, error } = await supabaseClient
+      const { count } = await supabaseClient
         .from('submissions')
         .select('*', { count: 'exact', head: true });
 
-      if (!error && count !== null) {
+      if (count !== null && count !== undefined) {
         document.getElementById('counterText').innerText = `${count} / 2000`;
         const percentage = Math.min((count / 2000) * 100, 100);
         document.getElementById('progressFill').style.width = `${percentage}%`;
@@ -760,10 +610,8 @@
         .limit(1);
 
       if (!error && data && data.length > 0) {
-        updateQuoteUI(data[0]);
-      } else {
-        document.getElementById('quoteHandle').innerText = "@none_yet";
-        document.getElementById('quoteText').innerText = '"No submissions yet. Be the first to share your thoughts."';
+        const entry = data[0];
+        updateQuoteUI(entry);
       }
     }
 
@@ -779,18 +627,15 @@
           .select('*');
 
         if (!error && data && data.length > 0) {
-          const availableQuotes = data.filter(item => item.id !== currentQuoteId);
-          const pool = availableQuotes.length > 0 ? availableQuotes : data;
-          const randomIndex = Math.floor(Math.random() * pool.length);
-
-          updateQuoteUI(pool[randomIndex]);
+          const randomIndex = Math.floor(Math.random() * data.length);
+          const entry = data[randomIndex];
+          updateQuoteUI(entry);
         }
         quoteContainer.classList.remove('fade-out');
       }, 200);
     }
 
     function updateQuoteUI(entry) {
-      currentQuoteId = entry.id;
       document.getElementById('quoteNumber').innerText = `#${String(entry.id).padStart(4, '0')}`;
       document.getElementById('quoteHandle').innerText = `@${entry.username}`;
       document.getElementById('quoteText').innerText = `"${entry.message}"`;
@@ -798,4 +643,4 @@
   </script>
 </body>
 </html>
-		
+
